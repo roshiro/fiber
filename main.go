@@ -34,6 +34,28 @@ func main() {
 	if err != nil {
 		log.Println("No .env file found, using environment variables")
 	}
+	
+	// Configure CORS
+	app.Use(func(c *fiber.Ctx) error {
+		// Get allowed origin from environment variable or use default
+		allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
+		if allowedOrigin == "" {
+			allowedOrigin = "http://localhost:5173" // Default development frontend URL
+		}
+		
+		// Set CORS headers
+		c.Set("Access-Control-Allow-Origin", allowedOrigin)
+		c.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		c.Set("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept")
+		c.Set("Access-Control-Allow-Credentials", "true")
+		
+		// Handle preflight requests
+		if c.Method() == "OPTIONS" {
+			return c.SendStatus(204)
+		}
+		
+		return c.Next()
+	})
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
