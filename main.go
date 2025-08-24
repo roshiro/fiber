@@ -38,13 +38,13 @@ func main() {
 	// Configure CORS
 	app.Use(func(c *fiber.Ctx) error {
 		// Get allowed origin from environment variable or use default
-		// allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
-		// if allowedOrigin == "" {
-		// 	allowedOrigin = "http://localhost:5173" // Default development frontend URL
-		// }
+		allowedOrigin := os.Getenv("ALLOWED_ORIGIN")
+		if allowedOrigin == "" {
+			allowedOrigin = "http://localhost:5173" // Default development frontend URL
+		}
 		
 		// Set CORS headers
-		// c.Set("Access-Control-Allow-Origin", allowedOrigin)
+		c.Set("Access-Control-Allow-Origin", allowedOrigin)
 		c.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		c.Set("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept")
 		c.Set("Access-Control-Allow-Credentials", "true")
