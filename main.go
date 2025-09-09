@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 
 	"context"
 
@@ -127,8 +128,9 @@ func handlePost(c *fiber.Ctx) error {
 		})
 	}
 
-	// Generate unique filename
-	filename := fmt.Sprintf("%d_%s", c.Context().ID(), "img")
+	// Generate unique filename with timestamp and request ID
+	timestamp := time.Now().UnixNano()
+	filename := fmt.Sprintf("%d_%d_%s", timestamp, c.Context().ID(), "img")
 	filepath := filepath.Join(uploadsDir, filename)
 
 	// Save file
